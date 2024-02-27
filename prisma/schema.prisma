@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("SUPABASE_DB_TRANSACTION_POOLER")
+  directUrl = env("SUPABASE_DB_SESSION_POOLER")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  userId            Int            @id @default(autoincrement())
+  userName          String?
+  userEmail         String
+  userPhone         String         @unique
+  userPfpUrl        String?
+  userDOB           DateTime?
+  userTrades        Int            @default(0)
+  userWins          Int            @default(0)
+  userLosses        Int            @default(0)
+  userWalletBalance Int            @default(0)
+  userOpinions      Prediction[]
+  userTopups        Topup[]
+  userWithdraws     Withdraw[]
+  userInvestments   Investment[]
+  userCreatedAt     DateTime       @default(now())
+  Notification      Notification[]
+  Transaction       Transaction[]
+}
+
+model Match {
+  matchId                 Int          @id @default(autoincrement())
+  matchNo                 Int          @unique
+  matchDate               DateTime
+  matchTeamA              String
+  matchTeamALogoUrl       String
+  matchTeamAScore         String
+  matchTeamAOvers         String
+  matchTeamAWickets       String
+  matchTeamARunRate       String
+  matchTeamAOdds          String
+  matchTeamAWinPrecentage String
+  matchTeamB              String
+  matchTeamBLogoUrl       String
+  matchTeamBScore         String
+  matchTeamBOvers         String
+  matchTeamBWickets       String
+  matchTeamBRunRate       String
+  matchTeamBOdds          String
+  matchVenue              String
+  matchSummary            String
+  matchStatus             String
+  matchToss               String
+  matchWinner             String
+  matchCreatedAt          DateTime     @default(now())
+  matchUpdatedAt          DateTime     @default(now())
+  matchPrediction         Prediction[]
+}
+
+model Prediction {
+  predId          Int           @id @default(autoincrement())
+  predUserId      Int
+  predMatchId     Int
+  predPrediction  Boolean // true for teamA win, false for teamB win
+  predQuantity    Int // Ex: 10 predictions
+  predValue       Int // Ex: Rs 8 per prediction
+  predTotalValue  Int // Ex: 10 * 8 = 80
+  predCreatedAt   DateTime      @default(now())
+  predUpdatedAt   DateTime      @default(now())
+  predStatus      String        @default("pending")
+  predWin         Boolean       @default(false)
+  predUser        User          @relation(fields: [predUserId], references: [userId])
+  predMatch       Match         @relation(fields: [predMatchId], references: [matchId])
+  predTransaction Transaction[]
+}
+
+model Notification {
+  notifId        Int      @id @default(autoincrement())
+  notifUserId    Int
+  notifMessage   String
+  notifType      String
+  notifCreatedAt DateTime @default(now())
+  notifUser      User     @relation(fields: [notifUserId], references: [userId])
+}
+
+model Topup {
+  topupId        Int      @id @default(autoincrement())
+  topupUserId    Int
+  topupAmount    Int
+  topupCreatedAt DateTime @default(now())
+  topupUser      User     @relation(fields: [topupUserId], references: [userId])
+}
+
+model Withdraw {
+  withdrawId        Int      @id @default(autoincrement())
+  withdrawUserId    Int
+  withdrawAmount    Int
+  withdrawCreatedAt DateTime @default(now())
+  withdrawUser      User     @relation(fields: [withdrawUserId], references: [userId])
+}
+
+model Investment {
+  investmentId        Int      @id @default(autoincrement())
+  investmentUserId    Int
+  investmentAmount    Int
+  investmentCreatedAt DateTime @default(now())
+  investmentUser      User     @relation(fields: [investmentUserId], references: [userId])
+}
+
+model Transaction {
+  transactionId        Int         @id @default(autoincrement())
+  transactionUserId    Int
+  transactionAmount    Int
+  transactionType      String
+  transactionCreatedAt DateTime    @default(now())
+  transactionPredId    Int?
+  transactionUser      User        @relation(fields: [transactionUserId], references: [userId])
+  Prediction           Prediction? @relation(fields: [transactionPredId], references: [predId])
+}
