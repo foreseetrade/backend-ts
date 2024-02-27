@@ -1,19 +1,40 @@
-// src/services/predictionService.ts
-import { PrismaClient } from '@prisma/client';
+// predictionService.ts
+import prisma from "../database/prisma";
 
-const prisma = new PrismaClient();
-
-export class PredictionService {
-  async createPrediction(userId: number, matchId: number, outcome: boolean, quantity: number) {
-    return prisma.prediction.create({
+export const createPrediction = async (
+  predUserId: number,
+  predMatchId: number,
+  predPrediction: boolean,
+  predQuantity: number,
+  predValue: number,
+  predTotalValue: number
+) => {
+  try {
+    const newPrediction = await prisma.prediction.create({
       data: {
-        userId,
-        matchId,
-        outcome,
-        quantity,
-        value: 0, // Initial value, update as needed
+        predUserId,
+        predMatchId,
+        predPrediction,
+        predQuantity,
+        predValue,
+        predTotalValue: predQuantity * predValue,
       },
     });
-  }
 
-}
+    return newPrediction;
+  } catch (error) {
+    throw new Error("Error creating prediction");
+  }
+};
+
+export const getUserPredictions = async (userId: number) => {
+  try {
+    const userPredictions = await prisma.prediction.findMany({
+      where: { predUserId: userId },
+    });
+
+    return userPredictions;
+  } catch (error) {
+    throw new Error("Error fetching user predictions");
+  }
+};

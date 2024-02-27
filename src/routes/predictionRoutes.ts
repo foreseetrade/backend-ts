@@ -1,42 +1,23 @@
-// src/routes/matchRoutes.ts
-import express from "express";
-import {
-  envOTPLESS_CLIENT_ID,
-  envOTPLESS_CLIENT_SECRET,
-  envJWTSecretKey,
-} from "../config";
-import jwt from "jsonwebtoken";
-const router = express.Router();
-import prisma from "../database/prisma";
+// predictionRoutes.ts
+import express, { Request, Response } from "express";
 import { authenticateToken } from "../middlewares/authenticateToken";
+import * as predictionService from "../services/predictionService";
 
-// Create a prediction
+const router = express.Router();
+
 router.post("/predictions", authenticateToken, async (req, res) => {
-  const {
-    predUserId,
-    predMatchId,
-    predPrediction,
-    predQuantity,
-    predValue,
-    predTotalValue,
-    predUser,
-    predMatch,
-  } = req.body;
+  const { predUserId, predMatchId, predPrediction, predQuantity, predValue } =
+    req.body;
 
   try {
-    const newPrediction = await prisma.prediction.create({
-      data: {
-        predUserId,
-        predMatchId,
-        predPrediction,
-        predQuantity,
-        predValue,
-        predTotalValue, // Add predTotalValue property
-        predUser, // Add predUser property
-        predMatch, // Add predMatch property
-      },
-    });
-
+    const newPrediction = await predictionService.createPrediction(
+      predUserId,
+      predMatchId,
+      predPrediction,
+      predQuantity,
+      predValue,
+      predQuantity * predValue
+    );
     res.status(201).json(newPrediction);
   } catch (error) {
     console.error("Error creating prediction:", error);
@@ -44,7 +25,6 @@ router.post("/predictions", authenticateToken, async (req, res) => {
   }
 });
 
-// Get user's predictions
 router.get(
   "/users/:userId/predictions",
   authenticateToken,
@@ -52,10 +32,9 @@ router.get(
     const userId = parseInt(req.params.userId, 10);
 
     try {
-      const userPredictions = await prisma.prediction.findMany({
-        where: { predUserId: userId },
-      });
-
+      const userPredictions = await predictionService.getUserPredictions(
+        userId
+      );
       res.status(200).json(userPredictions);
     } catch (error) {
       console.error("Error fetching user predictions:", error);
@@ -63,3 +42,5 @@ router.get(
     }
   }
 );
+
+export default router;

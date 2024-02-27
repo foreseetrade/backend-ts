@@ -1,18 +1,37 @@
-// src/services/transactionService.ts
-import { PrismaClient } from '@prisma/client';
+// transactionService.ts
 
-const prisma = new PrismaClient();
+import prisma from "../database/prisma";
 
-export class TransactionService {
-  async createTransaction(buyerId: number, sellerId: number, predictionId: number, price: number) {
-    return prisma.purchase.create({
+export const createTransaction = async (
+  transactionUserId: number,
+  transactionAmount: number,
+  transactionType: string,
+  transactionPredId?: number
+) => {
+  try {
+    const newTransaction = await prisma.transaction.create({
       data: {
-        buyerId,
-        sellerId,
-        predictionId,
-        price,
+        transactionUserId,
+        transactionAmount,
+        transactionType,
+        transactionPredId,
       },
     });
-  }
 
-}
+    return newTransaction;
+  } catch (error) {
+    throw new Error('Error creating transaction');
+  }
+};
+
+export const getUserTransactions = async (userId: number) => {
+  try {
+    const userTransactions = await prisma.transaction.findMany({
+      where: { transactionUserId: userId },
+    });
+
+    return userTransactions;
+  } catch (error) {
+    throw new Error('Error fetching user transactions');
+  }
+};
