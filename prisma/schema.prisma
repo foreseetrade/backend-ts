@@ -120,3 +120,19 @@ model Transaction {
   transactionUser      User        @relation(fields: [transactionUserId], references: [userId])
   Prediction           Prediction? @relation(fields: [transactionPredId], references: [predId])
 }
+
+model AppInformation {
+  appId      Int      @id @default(autoincrement())
+  appName    String
+  appVersion String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model FAQ {
+  faqId      Int      @id @default(autoincrement())
+  question   String
+  answer     String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}

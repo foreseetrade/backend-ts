@@ -1,6 +1,5 @@
 // src/routes/userRoutes.ts
 import express from "express";
-import { UserService } from "../services/userService";
 import {
   envOTPLESS_CLIENT_ID,
   envOTPLESS_CLIENT_SECRET,
@@ -8,7 +7,7 @@ import {
 } from "../config"; // Ensure you have jwtSecret in your config
 import jwt from "jsonwebtoken";
 const router = express.Router();
-const userService = new UserService();
+import * as userService from "../services/userService";
 
 // @ts-ignore
 import { UserDetail } from "otpless-node-js-auth-sdk";
@@ -75,6 +74,31 @@ router.post("/verify-token", async (req, res) => {
     });
   } catch (error) {
     console.error("Error verifying token:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/getUser/:id", async (req, res) => {
+  const userId = parseInt(req.params.id, 10);
+
+  try {
+    const user = await userService.getUserById(userId);
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user by ID:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.put("/updateUser/:id", async (req, res) => {
+  const userId = parseInt(req.params.id, 10);
+  const updatedUserData = req.body;
+
+  try {
+    const updatedUser = await userService.updateUser(userId, updatedUserData);
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
