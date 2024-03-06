@@ -1,7 +1,7 @@
 {
   "name": "foresee-node-be",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/server.ts",
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "5.9.1",
