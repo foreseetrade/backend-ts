@@ -8,6 +8,7 @@ import {
 import jwt from "jsonwebtoken";
 const router = express.Router();
 import * as userService from "../services/userService";
+import { passportInstance } from "../config/passport";
 
 // @ts-ignore
 import { UserDetail } from "otpless-node-js-auth-sdk";
@@ -102,5 +103,22 @@ router.put("/updateUser/:id", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+// Google Login using PassportJS
+router.get(
+  "/google",
+  passportInstance.authenticate("google", {
+    scope: ["email", "profile"],
+  })
+);
+
+// Google OAuth callback route
+router.get(
+  "/google/redirect",
+  passportInstance.authenticate("google"),
+  (req, res) => {
+    res.redirect("/");
+  }
+);
 
 export default router;

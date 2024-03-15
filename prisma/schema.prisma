@@ -13,6 +13,7 @@ generator client {
 
 model User {
   userId            Int            @id @default(autoincrement())
+  userAuthId        String?         @unique
   userName          String?
   userEmail         String
   userPhone         String         @unique
@@ -25,10 +26,8 @@ model User {
   userOpinions      Prediction[]
   userTopups        Topup[]
   userWithdraws     Withdraw[]
-  userInvestments   Investment[]
   userCreatedAt     DateTime       @default(now())
   Notification      Notification[]
-  Transaction       Transaction[]
 }
 
 model Match {
@@ -61,20 +60,19 @@ model Match {
 }
 
 model Prediction {
-  predId          Int           @id @default(autoincrement())
-  predUserId      Int
-  predMatchId     Int
-  predPrediction  Boolean // true for teamA win, false for teamB win
-  predQuantity    Int // Ex: 10 predictions
-  predValue       Int // Ex: Rs 8 per prediction
-  predTotalValue  Int // Ex: 10 * 8 = 80
-  predCreatedAt   DateTime      @default(now())
-  predUpdatedAt   DateTime      @default(now())
-  predStatus      String        @default("pending")
-  predWin         Boolean       @default(false)
-  predUser        User          @relation(fields: [predUserId], references: [userId])
-  predMatch       Match         @relation(fields: [predMatchId], references: [matchId])
-  predTransaction Transaction[]
+  predId         Int      @id @default(autoincrement())
+  predUserId     Int
+  predMatchId    Int
+  predPrediction Boolean // true for teamA win, false for teamB win
+  predQuantity   Int // Ex: 10 predictions
+  predValue      Int // Ex: Rs 8 per prediction
+  predTotalValue Int // Ex: 10 * 8 = 80
+  predCreatedAt  DateTime @default(now())
+  predUpdatedAt  DateTime @default(now())
+  predStatus     String   @default("pending")
+  predWin        Boolean  @default(false)
+  predUser       User     @relation(fields: [predUserId], references: [userId])
+  predMatch      Match    @relation(fields: [predMatchId], references: [matchId])
 }
 
 model Notification {
@@ -90,6 +88,9 @@ model Topup {
   topupId        Int      @id @default(autoincrement())
   topupUserId    Int
   topupAmount    Int
+  topupStatus    String   @default("pending")
+  topupRefId     String?
+  topupPhNumber  String?
   topupCreatedAt DateTime @default(now())
   topupUser      User     @relation(fields: [topupUserId], references: [userId])
 }
@@ -98,27 +99,11 @@ model Withdraw {
   withdrawId        Int      @id @default(autoincrement())
   withdrawUserId    Int
   withdrawAmount    Int
+  withdrawStatus    String   @default("pending")
+  withdrawRefId     String
+  withdrawPhNumber  String
   withdrawCreatedAt DateTime @default(now())
   withdrawUser      User     @relation(fields: [withdrawUserId], references: [userId])
-}
-
-model Investment {
-  investmentId        Int      @id @default(autoincrement())
-  investmentUserId    Int
-  investmentAmount    Int
-  investmentCreatedAt DateTime @default(now())
-  investmentUser      User     @relation(fields: [investmentUserId], references: [userId])
-}
-
-model Transaction {
-  transactionId        Int         @id @default(autoincrement())
-  transactionUserId    Int
-  transactionAmount    Int
-  transactionType      String
-  transactionCreatedAt DateTime    @default(now())
-  transactionPredId    Int?
-  transactionUser      User        @relation(fields: [transactionUserId], references: [userId])
-  Prediction           Prediction? @relation(fields: [transactionPredId], references: [predId])
 }
 
 model AppInformation {
@@ -130,9 +115,9 @@ model AppInformation {
 }
 
 model FAQ {
-  faqId      Int      @id @default(autoincrement())
-  question   String
-  answer     String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  faqId     Int      @id @default(autoincrement())
+  question  String
+  answer    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -15,15 +15,16 @@ export const createPrediction = async (
         predUserId,
         predMatchId,
         predPrediction,
-        predQuantity,
+        predQuantity: predTotalValue / predValue,
         predValue,
-        predTotalValue: predQuantity * predValue,
+        predTotalValue,
       },
     });
 
     return newPrediction;
   } catch (error) {
-    throw new Error("Error creating prediction");
+    console.error("Error creating prediction:", error);
+    return error;
   }
 };
 
@@ -35,6 +36,7 @@ export const getUserPredictions = async (userId: number) => {
 
     return userPredictions;
   } catch (error) {
-    throw new Error("Error fetching user predictions");
+    console.error("Error fetching user predictions:", error);
+    return error;
   }
 };
