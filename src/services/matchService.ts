@@ -53,3 +53,15 @@ export const updateMatch = async (matchId: number, match: any) => {
     return error;
   }
 };
+
+export const getTrendingMatches = async () => {
+  try {
+    const matches = await prisma.match.findMany({
+      where: { isTrending: true },
+    });
+    return matches;
+  } catch (error) {
+    console.error("Error fetching trending matches:", error);
+    return error;
+  }
+};

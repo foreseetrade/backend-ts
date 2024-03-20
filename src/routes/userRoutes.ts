@@ -123,7 +123,7 @@ router.get(
     });
     console.log("token", token);
     console.log("req.user", req.user);
-    res.redirect(`foresee://app?jwt=${token}&user=${req?.user}`);
+    res.redirect(`foresee://app?jwt=${token}`);
   }
 );
 

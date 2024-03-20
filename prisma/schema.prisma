@@ -57,6 +57,7 @@ model Match {
   matchCreatedAt          DateTime     @default(now())
   matchUpdatedAt          DateTime     @default(now())
   matchPrediction         Prediction[]
+  isTrending              Boolean      @default(false)
 }
 
 model Prediction {

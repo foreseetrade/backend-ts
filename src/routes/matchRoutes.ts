@@ -1,10 +1,11 @@
 // matchRoutes.ts
 import express, { Request, Response } from "express";
 import * as matchService from "../services/matchService";
+import { authenticateToken } from "../middlewares/authenticateToken";
 
 const router = express.Router();
 
-router.get("/all", async (req, res) => {
+router.get("/all", authenticateToken, async (req, res) => {
   try {
     const matches = await matchService.getAllMatches();
     console.log("Matches:", matches);
@@ -15,7 +16,7 @@ router.get("/all", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", authenticateToken, async (req, res) => {
   const matchId = parseInt(req.params.id, 10);
 
   try {
@@ -31,7 +32,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/update/:id", async (req, res) => {
+router.put("/update/:id", authenticateToken, async (req, res) => {
   const matchId = parseInt(req.params.id, 10);
   const updatedMatchData = req.body;
 
@@ -51,7 +52,7 @@ router.put("/update/:id", async (req, res) => {
   }
 });
 
-router.post("/new", async (req, res) => {
+router.post("/new", authenticateToken, async (req, res) => {
   const newMatchData = req.body;
 
   try {
@@ -64,6 +65,19 @@ router.post("/new", async (req, res) => {
   } catch (error) {
     console.error("Error creating match:", error);
     res.status(500).json({ message: "Internal Server Error", status: "error" });
+  }
+});
+
+
+// Get trending Matches : 
+router.get("/trending", authenticateToken, async (req, res) => {
+  try {
+    const matches = await matchService.getTrendingMatches();
+    console.log("Matches:", matches);
+    res.status(200).json(matches);
+  } catch (error) {
+    console.error("Error fetching matches:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 export default router;
