@@ -12,6 +12,7 @@ import { passportInstance } from "../config/passport";
 
 // @ts-ignore
 import { UserDetail } from "otpless-node-js-auth-sdk";
+import { versions } from "process";
 
 // Route for verifying otpless-token
 router.post("/verify-token", async (req, res) => {
@@ -117,8 +118,15 @@ router.get(
   "/google/redirect",
   passportInstance.authenticate("google"),
   (req, res) => {
-    res.redirect("/");
+    res.redirect(`foresee://app/login?userInfo=${req?.user}`);
   }
 );
+
+router.get("/logout", function (req, res) {
+  console.log("here");
+  req.session.destroy(function () {
+    res.redirect("/user/google");
+  });
+});
 
 export default router;
