@@ -128,9 +128,9 @@ router.get(
 );
 
 router.get("/logout", function (req, res) {
-  console.log("here");
+  console.log("logout called");
   req.session.destroy(function () {
-    res.redirect("/user/google");
+    res.redirect("/");
   });
 });
 

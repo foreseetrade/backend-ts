@@ -13,10 +13,10 @@ generator client {
 
 model User {
   userId            Int            @id @default(autoincrement())
-  userAuthId        String?         @unique
+  userAuthId        String?        @unique
   userName          String?
   userEmail         String
-  userPhone         String         @unique
+  userPhone         String?        @unique
   userPfpUrl        String?
   userDOB           DateTime?
   userTrades        Int            @default(0)
