@@ -118,7 +118,12 @@ router.get(
   "/google/redirect",
   passportInstance.authenticate("google"),
   (req, res) => {
-    res.redirect(`foresee://app/login?userInfo=${req?.user}`);
+    const token = jwt.sign({ user: req.user }, envJWTSecretKey, {
+      expiresIn: "1h",
+    });
+    console.log("token", token);
+    console.log("req.user", req.user);
+    res.redirect(`foresee://app?jwt=${token}&user=${req?.user}`);
   }
 );
 
