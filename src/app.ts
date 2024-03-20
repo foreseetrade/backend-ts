@@ -11,6 +11,9 @@ import withdrawRoutes from "./routes/withdrawRoutes";
 const app = express();
 import passport from "passport";
 import session from "express-session";
+import cors from "cors";
+
+app.use(cors()); 
 
 app.use(
   session({

@@ -28,6 +28,7 @@ model User {
   userWithdraws     Withdraw[]
   userCreatedAt     DateTime       @default(now())
   Notification      Notification[]
+  HelpNSupport      HelpNSupport[]
 }
 
 model Match {
@@ -58,6 +59,7 @@ model Match {
   matchUpdatedAt          DateTime     @default(now())
   matchPrediction         Prediction[]
   isTrending              Boolean      @default(false)
+  tags                    String[]
 }
 
 model Prediction {
@@ -65,6 +67,7 @@ model Prediction {
   predUserId     Int
   predMatchId    Int
   predPrediction Boolean // true for teamA win, false for teamB win
+  predTeamName   String
   predQuantity   Int // Ex: 10 predictions
   predValue      Int // Ex: Rs 8 per prediction
   predTotalValue Int // Ex: 10 * 8 = 80
@@ -86,25 +89,29 @@ model Notification {
 }
 
 model Topup {
-  topupId        Int      @id @default(autoincrement())
-  topupUserId    Int
-  topupAmount    Int
-  topupStatus    String   @default("pending")
-  topupRefId     String?
-  topupPhNumber  String?
-  topupCreatedAt DateTime @default(now())
-  topupUser      User     @relation(fields: [topupUserId], references: [userId])
+  topupId            Int      @id @default(autoincrement())
+  topupUserId        Int
+  topupAmount        Int
+  topupStatus        String   @default("pending")
+  topupRefId         String?
+  topupAppName       String?
+  topupPhNumber      String?
+  topupBankingName   String?
+  topupInappUserName String?
+  topupCreatedAt     DateTime @default(now())
+  topupUser          User     @relation(fields: [topupUserId], references: [userId])
 }
 
 model Withdraw {
-  withdrawId        Int      @id @default(autoincrement())
-  withdrawUserId    Int
-  withdrawAmount    Int
-  withdrawStatus    String   @default("pending")
-  withdrawRefId     String
-  withdrawPhNumber  String
-  withdrawCreatedAt DateTime @default(now())
-  withdrawUser      User     @relation(fields: [withdrawUserId], references: [userId])
+  withdrawId          Int      @id @default(autoincrement())
+  withdrawUserId      Int
+  withdrawAmount      Int
+  withdrawStatus      String   @default("pending")
+  withdrawUpiId       String
+  withdrawPhNumber    String
+  withdrawBankingName String
+  withdrawCreatedAt   DateTime @default(now())
+  withdrawUser        User     @relation(fields: [withdrawUserId], references: [userId])
 }
 
 model AppInformation {
@@ -121,4 +128,13 @@ model FAQ {
   answer    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model HelpNSupport {
+  helpId        Int      @id @default(autoincrement())
+  helpUserId    Int
+  helpMessage   String
+  helpStatus    String   @default("pending")
+  helpCreatedAt DateTime @default(now())
+  helpUser      User     @relation(fields: [helpUserId], references: [userId])
 }

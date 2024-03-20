@@ -5,8 +5,9 @@ import prisma from "../database/prisma";
 export const createWithdrawal = async (
   withdrawUserId: number,
   withdrawAmount: number,
-  withdrawRefId: string,
   withdrawStatus?: string,
+  withdrawUpiId?: string,
+  withdrawBankingName?: string,
   withdrawPhNumber?: string
 ) => {
   try {
@@ -14,9 +15,10 @@ export const createWithdrawal = async (
       data: {
         withdrawUserId,
         withdrawAmount,
-        withdrawRefId,
         withdrawStatus,
-        withdrawPhNumber: withdrawPhNumber || '',
+        withdrawUpiId : withdrawUpiId || "",
+        withdrawPhNumber: withdrawPhNumber || "",
+        withdrawBankingName : withdrawBankingName || "",
       },
     });
 

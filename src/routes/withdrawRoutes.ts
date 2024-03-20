@@ -5,22 +5,24 @@ import * as withdrawService from "../services/withdrawService";
 
 const router = express.Router();
 
-router.post("/withdrawals", authenticateToken, async (req, res) => {
+router.post("/new", authenticateToken, async (req, res) => {
   const {
     withdrawUserId,
     withdrawAmount,
-    withdrawRefId,
     withdrawStatus,
     withdrawPhNumber,
+    withdrawUpiId,
+    withdrawBankingName,
   } = req.body;
 
   try {
     const newWithdrawal = await withdrawService.createWithdrawal(
       withdrawUserId,
       withdrawAmount,
-      withdrawRefId,
       withdrawStatus,
-      withdrawPhNumber
+      withdrawPhNumber,
+      withdrawUpiId,
+      withdrawBankingName
     );
     res.status(201).json(newWithdrawal);
   } catch (error) {
@@ -29,20 +31,16 @@ router.post("/withdrawals", authenticateToken, async (req, res) => {
   }
 });
 
-router.get(
-  "/users/:userId/withdrawals",
-  authenticateToken,
-  async (req, res) => {
-    const userId = parseInt(req.params.userId, 10);
+router.get("/user", authenticateToken, async (req, res) => {
+  const userId = parseInt(req?.query?.userId as string, 10);
 
-    try {
-      const userWithdrawals = await withdrawService.getUserWithdrawals(userId);
-      res.status(200).json(userWithdrawals);
-    } catch (error) {
-      console.error("Error fetching user withdrawals:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+  try {
+    const userWithdrawals = await withdrawService.getUserWithdrawals(userId);
+    res.status(200).json(userWithdrawals);
+  } catch (error) {
+    console.error("Error fetching user withdrawals:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-);
+});
 
 export default router;

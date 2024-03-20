@@ -71,3 +71,21 @@ export const updateUser = async (userId: number, updatedUserData: any) => {
     throw new Error("Error updating user");
   }
 };
+
+// Get user by email
+
+export const getUserByEmail = async (email: any) => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: { userEmail: email },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (error) {
+    throw new Error("Error fetching user by email");
+  }
+};
