@@ -16,7 +16,7 @@ model User {
   userAuthId        String?        @unique
   userName          String?
   userEmail         String
-  userPhone         String?        @unique
+  userPhone         String?
   userPfpUrl        String?
   userDOB           DateTime?
   userTrades        Int            @default(0)

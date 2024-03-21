@@ -30,6 +30,7 @@ router.get("/all", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 router.get("/user/:userId/", async (req, res) => {
   const userId = parseInt(req.params.userId, 10);
 
