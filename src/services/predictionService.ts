@@ -4,8 +4,7 @@ import prisma from "../database/prisma";
 export const createPrediction = async (
   predUserId: number,
   predMatchId: number,
-  predPrediction: boolean,
-  predQuantity: number,
+  predTeamName: string,
   predValue: number,
   predTotalValue: number
 ) => {
@@ -14,11 +13,11 @@ export const createPrediction = async (
       data: {
         predUserId,
         predMatchId,
-        predPrediction,
+        predTeamName,
         predQuantity: predTotalValue / predValue,
         predValue,
         predTotalValue,
-      },
+      } as any,
     });
 
     return newPrediction;

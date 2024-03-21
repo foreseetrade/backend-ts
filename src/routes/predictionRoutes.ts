@@ -5,18 +5,17 @@ import * as predictionService from "../services/predictionService";
 
 const router = express.Router();
 
-router.post("/predictions", authenticateToken, async (req, res) => {
-  const { predUserId, predMatchId, predPrediction, predQuantity, predValue } =
+router.post("/new", authenticateToken, async (req, res) => {
+  const { predUserId, predMatchId, predTeamName, predTotalValue, predValue } =
     req.body;
 
   try {
     const newPrediction = await predictionService.createPrediction(
       predUserId,
       predMatchId,
-      predPrediction,
-      predQuantity,
+      predTeamName,
       predValue,
-      predQuantity * predValue
+      predTotalValue
     );
     res.status(201).json(newPrediction);
   } catch (error) {
@@ -25,22 +24,16 @@ router.post("/predictions", authenticateToken, async (req, res) => {
   }
 });
 
-router.get(
-  "/users/:userId/predictions",
-  authenticateToken,
-  async (req, res) => {
-    const userId = parseInt(req.params.userId, 10);
+router.get("/user", authenticateToken, async (req, res) => {
+  const userId = parseInt(req.query.userId as string, 10);
 
-    try {
-      const userPredictions = await predictionService.getUserPredictions(
-        userId
-      );
-      res.status(200).json(userPredictions);
-    } catch (error) {
-      console.error("Error fetching user predictions:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
+  try {
+    const userPredictions = await predictionService.getUserPredictions(userId);
+    res.status(200).json(userPredictions);
+  } catch (error) {
+    console.error("Error fetching user predictions:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-);
+});
 
 export default router;

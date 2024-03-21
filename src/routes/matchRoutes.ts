@@ -15,11 +15,11 @@ router.get("/all", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
-  const matchId = parseInt(req.params.id, 10);
+router.get("", async (req, res) => {
+  const matchNo = parseInt(req?.query?.matchNo as string, 10);
 
   try {
-    const match = await matchService.getMatchById(matchId);
+    const match = await matchService.getMatchByMatchNo(matchNo);
     console.log("Match:", match);
     if (!match) {
       return res.status(404).json({ error: "Match not found" });
@@ -31,8 +31,8 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.put("/update/:id", async (req, res) => {
-  const matchId = parseInt(req.params.id, 10);
+router.put("/update", async (req, res) => {
+  const matchId = parseInt(req.query.matchNo as string, 10);
   const updatedMatchData = req.body;
 
   try {
@@ -64,6 +64,58 @@ router.post("/new", async (req, res) => {
   } catch (error) {
     console.error("Error creating match:", error);
     res.status(500).json({ message: "Internal Server Error", status: "error" });
+  }
+});
+
+// Get trending Matches :
+router.get("/trending", async (req, res) => {
+  try {
+    const matches = await matchService.getTrendingMatches();
+    console.log("Matches:", matches);
+    res.status(200).json(matches);
+  } catch (error) {
+    console.error("Error fetching matches:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// get matches by tags
+router.get("/tags", async (req, res) => {
+  const tags = req.query.tags as string;
+  try {
+    const matches = await matchService.getMatchesByTags(tags);
+    console.log("Matches:", matches);
+    res.status(200).json(matches);
+  } catch (error) {
+    console.error("Error fetching matches:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// get matches by team
+router.get("/team", async (req, res) => {
+  const team = req.query.team as string;
+  try {
+    const matches = await matchService.getMatchesByTeam(team);
+    console.log("Matches:", matches);
+    res.status(200).json(matches);
+  } catch (error) {
+    console.error("Error fetching matches:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// get matches by status - isLive or isUpcoming  or isCompleted
+
+router.get("/status", async (req, res) => {
+  const status = req.query.status as string;
+  try {
+    const matches = await matchService.getMatchesByStatus(status);
+    console.log("Matches:", matches);
+    res.status(200).json(matches);
+  } catch (error) {
+    console.error("Error fetching matches:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 export default router;

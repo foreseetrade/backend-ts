@@ -12,10 +12,10 @@ export const getAllMatches = async () => {
   }
 };
 
-export const getMatchById = async (matchId: number) => {
+export const getMatchByMatchNo = async (matchNo: number) => {
   try {
     const match = await prisma.match.findUnique({
-      where: { matchId },
+      where: { matchNo },
     });
 
     if (!match) {
@@ -24,7 +24,7 @@ export const getMatchById = async (matchId: number) => {
 
     return match;
   } catch (error) {
-    console.error("Error fetching match by ID:", error);
+    console.error("Error fetching match by MatchNo:", error);
     return error;
   }
 };
@@ -41,15 +41,70 @@ export const createMatch = async (match: any) => {
   }
 };
 
-export const updateMatch = async (matchId: number, match: any) => {
+export const updateMatch = async (matchNo: number, match: any) => {
   try {
     const updatedMatch = await prisma.match.update({
-      where: { matchId },
+      where: { matchNo },
       data: match,
     });
     return updatedMatch;
   } catch (error) {
     console.error("Error updating match:", error);
+    return error;
+  }
+};
+
+export const getTrendingMatches = async () => {
+  try {
+    const matches = await prisma.match.findMany({
+      where: { isTrending: true },
+    });
+    return matches;
+  } catch (error) {
+    console.error("Error fetching trending matches:", error);
+    return error;
+  }
+};
+
+export const getMatchesByTags = async (tags: string) => {
+  try {
+    const matches = await prisma.match.findMany({
+      where: { tags: { has: tags } },
+    });
+    return matches;
+  } catch (error) {
+    console.error("Error fetching matches by tags:", error);
+    return error;
+  }
+};
+
+// Get matches by team if teamA contains the team or teamB contains the team
+export const getMatchesByTeam = async (team: string) => {
+  try {
+    const matches = await prisma.match.findMany({
+      where: {
+        OR: [
+          { matchTeamA: { contains: team } },
+          { matchTeamB: { contains: team } },
+        ],
+      },
+    });
+    return matches;
+  } catch (error) {
+    console.error("Error fetching matches by team:", error);
+    return error;
+  }
+};
+
+// Get matches by Live or Upcoming or Trending
+export const getMatchesByStatus = async (status: string) => {
+  try {
+    const matches = await prisma.match.findMany({
+      where: { matchStatus: status },
+    });
+    return matches;
+  } catch (error) {
+    console.error("Error fetching matches by status:", error);
     return error;
   }
 };

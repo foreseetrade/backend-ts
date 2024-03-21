@@ -123,7 +123,7 @@ router.get(
     });
     console.log("token", token);
     console.log("req.user", req.user);
-    res.redirect(`foresee://app?jwt=${token}&user=${req?.user}`);
+    res.redirect(`foresee://app?jwt=${token}`);
   }
 );
 
@@ -134,4 +134,18 @@ router.get("/logout", function (req, res) {
   });
 });
 
+
+// get user by email
+
+router.get("/email", async (req, res) => {
+  const email = req.query.email;
+
+  try {
+    const user = await userService.getUserByEmail(email);
+    res.status(200).json(user);
+  } catch (error) {
+    console.error("Error fetching user by email:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 export default router;
