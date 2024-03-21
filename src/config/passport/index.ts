@@ -15,6 +15,7 @@ export const passportInstance = passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
+        console.log("Google profile:", profile);
         // Check if the user exists in the database
         let user = await prisma.user.findUnique({
           where: { userAuthId: profile.id },
@@ -27,7 +28,7 @@ export const passportInstance = passport.use(
               userAuthId: profile.id,
               userName: profile.displayName,
               userEmail: profile.emails ? profile.emails[0].value : "",
-              userPfpUrl: profile.profileUrl ? profile.profileUrl : "",
+              userPfpUrl: profile._json.picture ? profile._json.picture : "",
               userPhone: "",
             } as User,
             // You can add other profile details here
