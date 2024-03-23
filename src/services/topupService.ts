@@ -5,16 +5,24 @@ import prisma from "../database/prisma";
 export const createTopup = async (
   topupUserId: number,
   topupAmount: number,
+  topupStatus: string,
   topupRefId: string,
-  topupStatus?: string
+  topupAppName: string,
+  topupPhNumber: string,
+  topupBankingName: string,
+  topupInappUserName: string
 ) => {
   try {
     const newTopup = await prisma.topup.create({
       data: {
         topupUserId,
         topupAmount,
-        topupRefId,
         topupStatus,
+        topupRefId,
+        topupAppName,
+        topupPhNumber,
+        topupBankingName,
+        topupInappUserName,
       },
     });
 

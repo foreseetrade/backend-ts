@@ -80,14 +80,44 @@ router.post("/verify-token", async (req, res) => {
   }
 });
 
-router.get("/getUser/:id", async (req, res) => {
-  const userId = parseInt(req.params.id, 10);
+// router.get("/getUserById", async (req, res) => {
+//   const userId = req.query.userId;
+
+//   try {
+//     const user = await userService.getUserById(userId);
+//     res.status(200).json(user);
+//   } catch (error) {
+//     console.error("Error fetching user by ID:", error);
+//     res.status(500).json({ error: "Internal Server Error" });
+//   }
+// });
+
+// Get  user by email
+
+router.get("/getUser", async (req, res) => {
+  const email = req.query.email;
 
   try {
-    const user = await userService.getUserById(userId);
+    const user = await userService.getUserByEmail(email);
     res.status(200).json(user);
   } catch (error) {
-    console.error("Error fetching user by ID:", error);
+    console.error("Error fetching user by email:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+// Update users by email
+
+router.put("/updateUser", async (req, res) => {
+  const { email, updatedUserData } = req.body;
+
+  try {
+    const updatedUser = await userService.updateUserByEmail(
+      email,
+      updatedUserData
+    );
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error("Error updating user by email:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
@@ -133,7 +163,6 @@ router.get("/logout", function (req, res) {
     res.redirect("/");
   });
 });
-
 
 // get user by email
 

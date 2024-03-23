@@ -1,5 +1,6 @@
 // userService.ts
 
+import { User } from "@prisma/client";
 import prisma from "../database/prisma";
 
 export const findUserByEmailOrPhone = async (email: string, phone: string) => {
@@ -87,5 +88,31 @@ export const getUserByEmail = async (email: any) => {
     return user;
   } catch (error) {
     throw new Error("Error fetching user by email");
+  }
+};
+
+// Update user by Email
+
+export const updateUserByEmail = async (
+  email: User["userEmail"],
+  updatedUserData: any
+) => {
+  try {
+    const user = await prisma.user.findFirst({
+      where: { userEmail: email },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { userId: user.userId },
+      data: updatedUserData,
+    });
+
+    return updatedUser;
+  } catch (error) {
+    throw new Error("Error updating user by email");
   }
 };
