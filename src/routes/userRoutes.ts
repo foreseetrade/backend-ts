@@ -153,7 +153,10 @@ router.get(
     });
     console.log("token", token);
     console.log("req.user", req.user);
-    res.redirect(`foresee://app?jwt=${token}`);
+    const email = JSON.stringify(req?.user);
+    res.redirect(
+      `foresee://app?jwt=${token}&user=${JSON.stringify(req?.user)}`
+    );
   }
 );
 
