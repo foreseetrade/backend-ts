@@ -5,14 +5,26 @@ import * as topupService from "../services/topupService";
 const router = express.Router();
 
 router.post("/new", async (req, res) => {
-  const { topupUserId, topupAmount, topUpRefId } = req.body;
+  const {
+    topupUserId,
+    topupAmount,
+    topUpRefId,
+    topupAppName,
+    topupPhNumber,
+    topupBankingName,
+    topupInappUserName,
+  } = req.body;
 
   try {
     const newTopup = await topupService.createTopup(
       topupUserId,
       topupAmount,
+      "pending",
       topUpRefId,
-      "pending"
+      topupAppName,
+      topupPhNumber,
+      topupBankingName,
+      topupInappUserName
     );
     res.status(201).json(newTopup);
   } catch (error) {
