@@ -5,7 +5,7 @@ import * as predictionService from "../services/predictionService";
 
 const router = express.Router();
 
-router.post("/new", authenticateToken, async (req, res) => {
+router.post("/new", async (req, res) => {
   const { predUserId, predMatchId, predTeamName, predTotalValue, predValue } =
     req.body;
 
@@ -24,11 +24,13 @@ router.post("/new", authenticateToken, async (req, res) => {
   }
 });
 
-router.get("/user", authenticateToken, async (req, res) => {
-  const userId = parseInt(req.query.userId as string, 10);
+router.get("/user", async (req, res) => {
+  const userEmail = req.query.userEmail as string;
 
   try {
-    const userPredictions = await predictionService.getUserPredictions(userId);
+    const userPredictions = await predictionService.getUserPredictions(
+      userEmail
+    );
     res.status(200).json(userPredictions);
   } catch (error) {
     console.error("Error fetching user predictions:", error);
@@ -36,4 +38,5 @@ router.get("/user", authenticateToken, async (req, res) => {
   }
 });
 
+// Get all transactions for a userEmail :
 export default router;

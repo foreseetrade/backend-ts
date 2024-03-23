@@ -16,7 +16,7 @@ router.post('/faqs', async (req, res) => {
   }
 });
 
-router.get('/faqs', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const faqList = await faqService.getAllFAQs();
     res.status(200).json(faqList);

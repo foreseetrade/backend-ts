@@ -155,7 +155,7 @@ router.get(
     console.log("req.user", req.user);
     const email = JSON.stringify(req?.user);
     res.redirect(
-      `foresee://app?jwt=${token}&user=${JSON.stringify(req?.user)}`
+      `foresee://app?jwt=${token}`
     );
   }
 );
@@ -180,4 +180,6 @@ router.get("/email", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
 export default router;
