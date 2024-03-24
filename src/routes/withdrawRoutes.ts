@@ -5,7 +5,7 @@ import * as withdrawService from "../services/withdrawService";
 
 const router = express.Router();
 
-router.post("/new", authenticateToken, async (req, res) => {
+router.post("/new", async (req, res) => {
   const {
     withdrawUserId,
     withdrawAmount,
@@ -31,7 +31,7 @@ router.post("/new", authenticateToken, async (req, res) => {
   }
 });
 
-router.get("/user", authenticateToken, async (req, res) => {
+router.get("/user", async (req, res) => {
   const userId = parseInt(req?.query?.userId as string, 10);
 
   try {

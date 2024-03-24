@@ -43,11 +43,12 @@ router.get("/all", async (req, res) => {
   }
 });
 
-router.get("/user/:userId/", async (req, res) => {
-  const userId = parseInt(req.params.userId, 10);
+router.get("/user", async (req, res) => {
+  const userId = req.query.userId;
+  const intUserId = parseInt(userId as string, 10);
 
   try {
-    const userTopups = await topupService.getUserTopups(userId);
+    const userTopups = await topupService.getUserTopups(intUserId);
     res.status(200).json(userTopups);
   } catch (error) {
     console.error("Error fetching user top-ups:", error);
