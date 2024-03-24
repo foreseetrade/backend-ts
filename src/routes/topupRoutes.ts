@@ -18,7 +18,7 @@ router.post("/new", async (req, res) => {
   try {
     const newTopup = await topupService.createTopup(
       topupUserId,
-      topupAmount,
+      parseInt(topupAmount, 10), // Convert topupAmount,
       "pending",
       topUpRefId,
       topupAppName,

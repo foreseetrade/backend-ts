@@ -28,6 +28,7 @@ export const createTopup = async (
 
     return newTopup;
   } catch (error) {
+    console.error("Error creating top-up:", error);
     throw new Error("Error creating top-up");
   }
 };

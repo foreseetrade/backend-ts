@@ -24,6 +24,7 @@ export const createWithdrawal = async (
 
     return newWithdrawal;
   } catch (error) {
+    console.error("Error creating withdrawal:", error);
     throw new Error("Error creating withdrawal");
   }
 };
