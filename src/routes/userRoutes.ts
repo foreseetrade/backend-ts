@@ -70,13 +70,13 @@ router.get(
   passportInstance.authenticate("google"),
   (req, res) => {
     console.log("req.user", req.user);
-    const token = jwt.sign({ userAuthId: req.user }, envJWTSecretKey, {
+    const token = jwt.sign({ userId: req.user }, envJWTSecretKey, {
       expiresIn: "10d",
     });
     console.log("token", token);
-    const userAuthId = JSON.stringify(req?.user);
+    const userId = JSON.stringify(req?.user);
 
-    res.redirect(`foresee://app?jwt=${token}&userAuthId=${userAuthId}`);
+    res.redirect(`foresee://app?jwt=${token}&userId=${userId}`);
   }
 );
 
