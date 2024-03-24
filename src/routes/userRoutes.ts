@@ -61,7 +61,7 @@ router.get(
 router.get(
   "/google/redirect",
   passportInstance.authenticate("google"),
-  (req, res) => {
+  (req: any, res: any) => {
     console.log("req in Google Redirect", req);
 
     console.log("req.user", req.user);
@@ -71,14 +71,18 @@ router.get(
       return res.status(401).send("Unauthorized");
     }
 
-    const token = jwt.sign({ userId: req.user}, envJWTSecretKey, {
-      expiresIn: "10d",
-    });
+    const token = jwt.sign(
+      { userEmail: req.user?.userEmail },
+      envJWTSecretKey,
+      {
+        expiresIn: "10d",
+      }
+    );
 
     console.log("token", token);
-    const userId = req.user;
+    const userEmail = req.user?.userEmail;
 
-    res.redirect(`foresee://app?jwt=${token}&userId=${userId}`);
+    res.redirect(`foresee://app?jwt=${token}&userEmail=${userEmail}`);
   }
 );
 
