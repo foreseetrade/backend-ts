@@ -66,7 +66,6 @@ model Prediction {
   predId         Int      @id @default(autoincrement())
   predUserId     Int
   predMatchId    Int
-  predPrediction Boolean // true for teamA win, false for teamB win
   predTeamName   String
   predQuantity   Int // Ex: 10 predictions
   predValue      Int // Ex: Rs 8 per prediction

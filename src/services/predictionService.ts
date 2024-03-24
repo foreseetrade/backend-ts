@@ -17,6 +17,16 @@ export const createPrediction = async (
         predQuantity: predTotalValue / predValue,
         predValue,
         predTotalValue,
+        predUser: {
+          connect: {
+            userId: predUserId,
+          },
+        },
+        predMatch: {
+          connect: {
+            matchId: predMatchId,
+          },
+        },
       } as any,
     });
 
