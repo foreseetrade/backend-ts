@@ -16,9 +16,14 @@ export const createWithdrawal = async (
         withdrawUserId,
         withdrawAmount,
         withdrawStatus,
-        withdrawUpiId : withdrawUpiId || "",
+        withdrawUpiId: withdrawUpiId || "",
         withdrawPhNumber: withdrawPhNumber || "",
-        withdrawBankingName : withdrawBankingName || "",
+        withdrawBankingName: withdrawBankingName || "",
+        withdrawUser: {
+          connect: {
+            userId: withdrawUserId,
+          },
+        } as any,
       },
     });
 

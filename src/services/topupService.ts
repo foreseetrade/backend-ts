@@ -23,6 +23,11 @@ export const createTopup = async (
         topupPhNumber,
         topupBankingName,
         topupInappUserName,
+        topupUser: {
+          connect: {
+            userId: topupUserId,
+          },
+        } as any,
       },
     });
 
