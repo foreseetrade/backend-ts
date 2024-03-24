@@ -27,10 +27,13 @@ export const createPrediction = async (
   }
 };
 
-export const getUserPredictions = async (userId: number) => {
+export const getUserPredictions = async (userEmail: string) => {
   try {
+    const user = await prisma.user.findFirst({
+      where: { userEmail },
+    });
     const userPredictions = await prisma.prediction.findMany({
-      where: { predUserId: userId },
+      where: { predUserId: user?.userId },
     });
 
     return userPredictions;
