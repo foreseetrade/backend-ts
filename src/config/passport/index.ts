@@ -31,15 +31,11 @@ export const passportInstance = passport.use(
               userPfpUrl: profile._json.picture ? profile._json.picture : "",
               userPhone: "",
             } as User,
-            // You can add other profile details here
-            // Example:
-            // email: profile.emails[0].value,
-            // name: profile.displayName
           });
         }
 
         // Pass the user to the next middleware
-        return done(null, user?.userEmail as any);
+        return done(null, user?.userAuthId as any);
       } catch (error) {
         // Handle error
         console.error("Error in Google OAuth strategy:", error);
