@@ -15,7 +15,6 @@ export const createTopup = async (
   try {
     const newTopup = await prisma.topup.create({
       data: {
-        topupUserId,
         topupAmount,
         topupStatus,
         topupRefId,
