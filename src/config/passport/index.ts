@@ -31,10 +31,6 @@ export const passportInstance = passport.use(
               userPfpUrl: profile._json.picture ? profile._json.picture : "",
               userPhone: "",
             } as User,
-            // You can add other profile details here
-            // Example:
-            // email: profile.emails[0].value,
-            // name: profile.displayName
           });
         }
 
