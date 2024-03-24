@@ -1,18 +1,11 @@
 // src/routes/userRoutes.ts
 import express from "express";
-import {
-  envOTPLESS_CLIENT_ID,
-  envOTPLESS_CLIENT_SECRET,
-  envJWTSecretKey,
-} from "../config"; // Ensure you have jwtSecret in your config
+import { envJWTSecretKey } from "../config"; // Ensure you have jwtSecret in your config
 import jwt from "jsonwebtoken";
 const router = express.Router();
 import * as userService from "../services/userService";
 import { passportInstance } from "../config/passport";
-
-// @ts-ignore
-import { UserDetail } from "otpless-node-js-auth-sdk";
-import { versions } from "process";
+import { User } from "@prisma/client";
 
 // Get  user by email
 router.get("/getUser", async (req, res) => {
@@ -69,12 +62,21 @@ router.get(
   "/google/redirect",
   passportInstance.authenticate("google"),
   (req, res) => {
+    console.log("req in Google Redirect", req);
+
     console.log("req.user", req.user);
-    const token = jwt.sign({ userId: req.user }, envJWTSecretKey, {
+
+    if (!req.user || !req?.user) {
+      // Handle case where user is not authenticated or user ID is missing
+      return res.status(401).send("Unauthorized");
+    }
+
+    const token = jwt.sign({ userId: req.user}, envJWTSecretKey, {
       expiresIn: "10d",
     });
+
     console.log("token", token);
-    const userId = JSON.stringify(req?.user);
+    const userId = req.user;
 
     res.redirect(`foresee://app?jwt=${token}&userId=${userId}`);
   }

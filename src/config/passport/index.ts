@@ -6,6 +6,25 @@ import { User } from "@prisma/client";
 
 const GoogleStrategy = passportGoogle.Strategy;
 
+passport.serializeUser((user: any, done) => {
+  done(null, user?.userId); // Serialize using 'userId'
+});
+
+passport.deserializeUser(async (userId: number, done) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { userId: userId }, // Deserialize using 'userId'
+    });
+    if (!user) {
+      return done(null, false);
+    }
+    done(null, user);
+  } catch (error) {
+    console.error("Error deserializing user:", error);
+    done(error as Error);
+  }
+});
+
 export const passportInstance = passport.use(
   new GoogleStrategy(
     {
@@ -35,7 +54,7 @@ export const passportInstance = passport.use(
         }
 
         // Pass the user to the next middleware
-        return done(null, user?.userId as any);
+        return done(null, user);
       } catch (error) {
         // Handle error
         console.error("Error in Google OAuth strategy:", error);
@@ -44,22 +63,3 @@ export const passportInstance = passport.use(
     }
   )
 );
-
-passport.serializeUser((user: any, done) => {
-  done(null, user?.userId); // Assuming 'id' is the unique identifier
-});
-
-passport.deserializeUser(async (userId: number, done) => {
-  try {
-    const user = await prisma.user.findUnique({
-      where: { userId: userId },
-    });
-    if (!user) {
-      return done(null, false);
-    }
-    done(null, user);
-  } catch (error) {
-    console.error("Error deserializing user:", error);
-    done(error as Error);
-  }
-});
