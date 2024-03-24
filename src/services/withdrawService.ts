@@ -13,7 +13,6 @@ export const createWithdrawal = async (
   try {
     const newWithdrawal = await prisma.withdraw.create({
       data: {
-        withdrawUserId,
         withdrawAmount,
         withdrawStatus,
         withdrawUpiId: withdrawUpiId || "",
