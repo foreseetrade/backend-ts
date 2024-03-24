@@ -35,7 +35,7 @@ export const passportInstance = passport.use(
         }
 
         // Pass the user to the next middleware
-        return done(null, user?.userAuthId as any);
+        return done(null, user?.userId as any);
       } catch (error) {
         // Handle error
         console.error("Error in Google OAuth strategy:", error);
@@ -46,14 +46,17 @@ export const passportInstance = passport.use(
 );
 
 passport.serializeUser((user: any, done) => {
-  done(null, user?.userAuthId); // Assuming 'id' is the unique identifier
+  done(null, user?.userId); // Assuming 'id' is the unique identifier
 });
 
-passport.deserializeUser(async (userAuthId: string, done) => {
+passport.deserializeUser(async (userId: number, done) => {
   try {
     const user = await prisma.user.findUnique({
-      where: { userAuthId: userAuthId },
+      where: { userId: userId },
     });
+    if (!user) {
+      return done(null, false);
+    }
     done(null, user);
   } catch (error) {
     console.error("Error deserializing user:", error);
