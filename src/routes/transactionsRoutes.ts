@@ -4,7 +4,7 @@ import * as userService from "../services/userService";
 
 const router = express.Router();
 
-router.get("/transactions", async (req, res) => {
+router.get("/user", async (req, res) => {
   try {
     const userEmail = req.query.userEmail;
 

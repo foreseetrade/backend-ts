@@ -8,6 +8,7 @@ import predictionRoutes from "./routes/predictionRoutes";
 import topupRoutes from "./routes/topupRoutes";
 import notificationRoutes from "./routes/notificationRoutes";
 import withdrawRoutes from "./routes/withdrawRoutes";
+import transacRoutes from "./routes/transactionsRoutes";
 const app = express();
 import passport from "passport";
 import session from "express-session";
@@ -38,5 +39,6 @@ app.use("/prediction", predictionRoutes);
 app.use("/topup", topupRoutes);
 app.use("/user", userRoutes);
 app.use("/withdraw", withdrawRoutes);
+app.use("/transaction", transacRoutes)
 
 export default app;
