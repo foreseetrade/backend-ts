@@ -11,7 +11,6 @@ export const createPrediction = async (
   try {
     const newPrediction = await prisma.prediction.create({
       data: {
-        predMatchId,
         predTeamName,
         predQuantity: predTotalValue / predValue,
         predValue,
