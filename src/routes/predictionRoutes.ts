@@ -6,14 +6,21 @@ import * as predictionService from "../services/predictionService";
 const router = express.Router();
 
 router.post("/new", async (req, res) => {
-  const { predUserId, predMatchId, predTeamName, predTotalValue, predValue } =
-    req.body;
+  const {
+    predUserId,
+    predMatchId,
+    predTeamName,
+    predTeamOpponent,
+    predTotalValue,
+    predValue,
+  } = req.body;
 
   try {
     const newPrediction = await predictionService.createPrediction(
       predUserId,
       predMatchId,
       predTeamName,
+      predTeamOpponent,
       predValue,
       predTotalValue
     );

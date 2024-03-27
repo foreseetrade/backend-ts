@@ -63,19 +63,20 @@ model Match {
 }
 
 model Prediction {
-  predId         Int      @id @default(autoincrement())
-  predUserId     Int
-  predMatchId    Int
-  predTeamName   String
-  predQuantity   Int // Ex: 10 predictions
-  predValue      Int // Ex: Rs 8 per prediction
-  predTotalValue Int // Ex: 10 * 8 = 80
-  predCreatedAt  DateTime @default(now())
-  predUpdatedAt  DateTime @default(now())
-  predStatus     String   @default("pending")
-  predWin        Boolean  @default(false)
-  predUser       User     @relation(fields: [predUserId], references: [userId])
-  predMatch      Match    @relation(fields: [predMatchId], references: [matchId])
+  predId           Int      @id @default(autoincrement())
+  predUserId       Int
+  predMatchId      Int
+  predTeamName     String
+  predTeamOpponent String?
+  predQuantity     Int // Ex: 10 predictions
+  predValue        Int // Ex: Rs 8 per prediction
+  predTotalValue   Int // Ex: 10 * 8 = 80
+  predCreatedAt    DateTime @default(now())
+  predUpdatedAt    DateTime @default(now())
+  predStatus       String   @default("pending")
+  predWin          Boolean  @default(false)
+  predUser         User     @relation(fields: [predUserId], references: [userId])
+  predMatch        Match    @relation(fields: [predMatchId], references: [matchId])
 }
 
 model Notification {

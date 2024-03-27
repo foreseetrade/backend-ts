@@ -5,13 +5,45 @@ export const createPrediction = async (
   predUserId: number,
   predMatchId: number,
   predTeamName: string,
+  predTeamOpponent: string,
   predValue: number,
   predTotalValue: number
 ) => {
   try {
+    // check wallet balance and update it
+    const user = await prisma.user.findFirst({
+      where: {
+        userId: predUserId,
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (user.userWalletBalance < predTotalValue) {
+      throw new Error("Insufficient balance");
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        userId: predUserId,
+      },
+      data: {
+        userWalletBalance: {
+          decrement: predTotalValue,
+        },
+      },
+    });
+
+    if (!updatedUser) {
+      throw new Error("User not found");
+    }
+
     const newPrediction = await prisma.prediction.create({
       data: {
         predTeamName,
+        predTeamOpponent,
         predQuantity: predTotalValue / predValue,
         predValue,
         predTotalValue,
