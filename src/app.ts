@@ -9,6 +9,7 @@ import topupRoutes from "./routes/topupRoutes";
 import notificationRoutes from "./routes/notificationRoutes";
 import withdrawRoutes from "./routes/withdrawRoutes";
 import transacRoutes from "./routes/transactionsRoutes";
+import legalsRoutes from "./routes/legalsRoutes";
 const app = express();
 import passport from "passport";
 import session from "express-session";
@@ -40,5 +41,6 @@ app.use("/topup", topupRoutes);
 app.use("/user", userRoutes);
 app.use("/withdraw", withdrawRoutes);
 app.use("/transaction", transacRoutes)
+app.use("/legals", legalsRoutes);
 
 export default app;

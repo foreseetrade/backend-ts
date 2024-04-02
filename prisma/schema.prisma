@@ -75,6 +75,7 @@ model Prediction {
   predUpdatedAt    DateTime @default(now())
   predStatus       String   @default("pending")
   predWin          Boolean  @default(false)
+  predCurrentValue Int?
   predUser         User     @relation(fields: [predUserId], references: [userId])
   predMatch        Match    @relation(fields: [predMatchId], references: [matchId])
 }
@@ -137,4 +138,12 @@ model HelpNSupport {
   helpStatus    String   @default("pending")
   helpCreatedAt DateTime @default(now())
   helpUser      User     @relation(fields: [helpUserId], references: [userId])
+}
+
+model Legals {
+  legalId         Int      @id @default(autoincrement())
+  privacy         String?
+  terms           String?
+  legalsCreatedAt DateTime @default(now())
+  legalsUpdatedAt DateTime @updatedAt
 }
